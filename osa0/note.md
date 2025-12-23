@@ -3,25 +3,25 @@ sequenceDiagram
 	participant browser
 	participant server
 
-	browser->>server: POST
+	browser->>server: POST 
 https://studies.cs.helsinki.fi/exampleapp/new_note
 	activate server
 	server-->>browser: redirect to /notes
 	deactivate server
 
-	browser->>server: GET
+	browser->>server: GET 
 https://studies.cs.helsinki.fi/exampleapp/notes
 	activate server
 	server-->>browser: HTML document
 	deactivate derver
 	
-	browser->>server: GET
+	browser->>server: GET 
 https://studies.cs.helsinki.fi/exampleapp/main.css
 	activate server
 	server-->>browser: the CSS file
 	deactivate server
 
-	browser->>server: GET
+	browser->>server: GET 
 https://studies.cs.helsinki.fi/exampleapp/main.js
 	activate server
 	server-->browser: the JavaScript file
@@ -29,7 +29,7 @@ https://studies.cs.helsinki.fi/exampleapp/main.js
 	
 	Note right of browser: The browser starts executing the JavaScript code that fetches the JSON from the server
 
-	browser->>server: GET
+	browser->>server: GET 
 https://studies.cs.helsinki.fi/exampleapp/data.json
 	activate server
 	server-->browser: the JSON data
