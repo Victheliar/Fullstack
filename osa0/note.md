@@ -4,7 +4,7 @@ sequenceDiagram
 	participant server
 
 	browser->>server: POST
-	https://studies.cs.helsinki.fi/exampleapp/new_note
+	new_note
 	activate server
 	server-->>browser: redirect to /notes
 	deactivate server
@@ -13,7 +13,7 @@ sequenceDiagram
 	https://studies.cs.helsinki.fi/exampleapp/notes
 	activate server
 	server-->>browser: HTML document
-	deactivate derver
+	deactivate server
 	
 	browser->>server: GET 
 	https://studies.cs.helsinki.fi/exampleapp/main.css
@@ -24,7 +24,7 @@ sequenceDiagram
 	browser->>server: GET 
 	https://studies.cs.helsinki.fi/exampleapp/main.js
 	activate server
-	server-->browser: the JavaScript file
+	server-->>browser: the JavaScript file
 	deactivate server
 	
 	Note right of browser: The browser starts executing the JavaScript code that fetches the JSON from the server
@@ -35,5 +35,5 @@ sequenceDiagram
 	server-->browser: the JSON data
 	deactivate server
 
-	Note right of browser: The browser executes the callback function that renders the notes
+	Note right of browser: The browser executes the callback function that renders the notes, also containing the new note
 ```
