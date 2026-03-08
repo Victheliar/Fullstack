@@ -27,11 +27,11 @@ const PersonForm = ({person, name, number}) => {
   )
 }
 
-const Persons = ({numbers}) => {
+const Persons = ({numbers, remove}) => {
   return (
       <ul>
           {numbers.map((person) => (
-            <li key={person.name}>{person.name} {person.number}</li>  
+            <li key={person.id}>{person.name} {person.number}<button onClick={() => remove(person.id)}>delete</button></li>
           ))}
       </ul>
   )
@@ -84,6 +84,17 @@ const App = () => {
     return person.name.toLowerCase().includes(newFilter.toLowerCase())
   })
 
+  const removeContact = (id) => {
+    const person = persons.find(c => c.id === id)
+    const updatedContacts = persons.filter(person => person.id !== id)
+
+    if (window.confirm(`Delete ${person.name}?`)){
+      contactService
+        .remove(person.id)
+        .then(setPersons(updatedContacts))
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -96,7 +107,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <Persons numbers={personsToShow} />
+      <Persons numbers={personsToShow} remove={removeContact} />
     </div>
   )
 }
