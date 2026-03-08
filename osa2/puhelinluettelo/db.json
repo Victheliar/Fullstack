@@ -24,6 +24,11 @@
       "id": "90a4",
       "name": "vici",
       "number": "123456789"
+    },
+    {
+      "id": "fd3a",
+      "name": "jee",
+      "number": "jee"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
