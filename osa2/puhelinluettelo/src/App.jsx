@@ -53,11 +53,17 @@ const App = () => {
 
   const handleNewPerson = (event) => {
     event.preventDefault()
-    const names = persons.map(person => person.name)
-    if (names.includes(newName)){
-      window.alert(`${newName} is already added to phonebook`)
-    } else {
     const nameObject = {name: newName, number: newNumber}
+    const namePresent = persons.find(person => newName.toLowerCase() === person.name.toLowerCase());
+    if (namePresent && window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        contactService
+        .update(namePresent.id, nameObject)
+        .then(returnedContact => {
+          setPersons(persons.map(person => person.id !== returnedContact.id ? person : returnedContact))
+          setNewName('')
+          setNewNumber('')
+        })
+    } else {
     contactService
       .create(nameObject)
       .then(returnedContact => {
