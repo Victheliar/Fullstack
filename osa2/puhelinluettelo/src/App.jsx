@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import contactService from './services/contacts'
 import Notification from './components/Notification'
+import Error from './components/Error'
 
 const Filter = ({filter}) => {
   return (
@@ -44,6 +45,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [notification, setNotification] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const showNotification = (message) => {
     setNotification(message)
@@ -78,6 +80,14 @@ const App = () => {
           )
           setTimeout(() => {
             setNotification(null)
+          }, 5000)
+        })
+        .catch((error) => {
+          setErrorMessage(
+            `Information of ${namePresent.name} has already been removed from the server`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
           }, 5000)
         })
     } else {
@@ -131,6 +141,14 @@ const App = () => {
             setNotification(null)
           }, 5000)
         })
+        .catch(error => {
+          setErrorMessage(
+            `${person.name} was already deleted`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
     }
   }
 
@@ -139,6 +157,7 @@ const App = () => {
       <h2>Phonebook</h2>
 
       <Notification message={notification} />
+      <Error message={errorMessage} />
 
       <Filter filter={handleNewFilter}/>
 
