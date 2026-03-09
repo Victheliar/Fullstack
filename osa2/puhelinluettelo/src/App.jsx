@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import contactService from './services/contacts'
+import Notification from './components/Notification'
 
 const Filter = ({filter}) => {
   return (
@@ -42,6 +43,14 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [notification, setNotification] = useState(null)
+
+  const showNotification = (message) => {
+    setNotification(message)
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
 
   useEffect(() => {
     contactService
@@ -63,6 +72,14 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+        .then((notification) => {
+          setNotification(
+            `Updated ${namePresent.name}`
+          )
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
+        })
     } else {
     contactService
       .create(nameObject)
@@ -70,6 +87,14 @@ const App = () => {
         setPersons(persons.concat(returnedContact))
         setNewName('')
         setNewNumber('')
+      })
+      .then((notification) => {
+        setNotification(
+          `Added ${newName}`
+        )
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
       })
     }
   }
@@ -98,12 +123,22 @@ const App = () => {
       contactService
         .remove(person.id)
         .then(setPersons(updatedContacts))
+        .then(notification => {
+          setNotification(
+           `Deleted ${person.name}` 
+          )
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
+        })
     }
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={notification} />
 
       <Filter filter={handleNewFilter}/>
 
