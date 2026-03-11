@@ -19,18 +19,20 @@ const Search = ({result}) => {
   )
 }
 
-const Country = ({country, capital, area, languages, flag}) => {
+const Country = ({country}) => {
+  console.log(country[0].flags.png)
   return (
     <div>
-      <h2>{country}</h2>
-      <p>Capital {capital}</p>
-      <p>Area {area}</p>
+      <h2>{country[0].name.common}</h2>
+      <p>Capital {country[0].capital}</p>
+      <p>Area {country[0].area}</p>
       <h3>Languages</h3>
       <ul>
-        {languages.map((language) => (
-          <li key={language}>{language}</li>
+        {Object.entries(country[0].languages).map(([code, language]) => (
+          <li key={code}>{language}</li>
         ))}
       </ul>
+      <img src={country[0].flags.png}></img>
     </div>
   )
 }
@@ -56,6 +58,11 @@ const App = () => {
   })
 
   const handleSearch = () => {
+    if (countriesToShow.length === 1) {
+      return (
+        <Country country={countriesToShow} />
+      )
+    }
     if (countriesToShow.length > 10) {
       return (
         <p>
@@ -65,7 +72,11 @@ const App = () => {
     }
     if (countriesToShow.length <= 10) {
       return (
-        
+        <ul>
+          {countriesToShow.map((country) => (
+            <p key={country.name.common}>{country.name.common}</p>
+          ))}
+        </ul>
       )
     }
   }
