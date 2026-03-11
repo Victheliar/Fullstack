@@ -20,7 +20,7 @@ const Search = ({result}) => {
 }
 
 const Country = ({country}) => {
-  console.log(country[0].flags.png)
+  // console.log(country[0].flags.png)
   return (
     <div>
       <h2>{country[0].name.common}</h2>
@@ -74,7 +74,7 @@ const App = () => {
       return (
         <ul>
           {countriesToShow.map((country) => (
-            <p key={country.name.common}>{country.name.common}</p>
+            <p key={country.name.common}>{country.name.common}<button onClick={()=>setNewFilter(country.name.common)}>Show</button></p>
           ))}
         </ul>
       )
