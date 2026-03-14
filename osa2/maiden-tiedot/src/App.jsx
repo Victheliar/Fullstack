@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import countriesService from './services/countries'
 
-const Filter = ({filter}) => {
+const apiKey = import.meta.env.VITE_WEATHER_KEY
+
+const Filter = ({ filter }) => {
   return (
     <form>
       <div>
@@ -11,7 +13,7 @@ const Filter = ({filter}) => {
   )
 }
 
-const Search = ({result}) => {
+const Search = ({ result }) => {
   return (
     <div>
       {result}
@@ -19,20 +21,45 @@ const Search = ({result}) => {
   )
 }
 
-const Country = ({country}) => {
-  // console.log(country[0].flags.png)
+const Country = ({ country, apiKey }) => {
+  const [weather, setWeather] = useState(null)
+  const capital = country.capital?.[0]
+
+  useEffect(() => {
+    if (!capital || !apiKey) {
+      return
+    }
+
+    countriesService
+      .getWeather(capital, apiKey)
+      .then(response => {
+        setWeather(response)
+      })
+  }, [capital, apiKey])
+
   return (
     <div>
-      <h2>{country[0].name.common}</h2>
-      <p>Capital {country[0].capital}</p>
-      <p>Area {country[0].area}</p>
+      <h2>{country.name.common}</h2>
+      <p>Capital {country.capital}</p>
+      <p>Area {country.area}</p>
       <h3>Languages</h3>
       <ul>
-        {Object.entries(country[0].languages).map(([code, language]) => (
+        {Object.entries(country.languages).map(([code, language]) => (
           <li key={code}>{language}</li>
         ))}
       </ul>
-      <img src={country[0].flags.png}></img>
+      <img src={country.flags.png} alt={`Flag of ${country.name.common}`} />
+      <h3>Weather in {capital}</h3>
+      {weather && (
+        <div>
+          <p>Temperature {weather.main.temp} Celsius</p>
+          <img
+            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+            alt={weather.weather[0].description}
+          />
+          <p>Wind {weather.wind.speed} m/s</p>
+        </div>
+      )}
     </div>
   )
 }
@@ -60,7 +87,7 @@ const App = () => {
   const handleSearch = () => {
     if (countriesToShow.length === 1) {
       return (
-        <Country country={countriesToShow} />
+        <Country country={countriesToShow[0]} apiKey={apiKey} />
       )
     }
     if (countriesToShow.length > 10) {
@@ -70,11 +97,13 @@ const App = () => {
         </p>
       )
     }
-    if (countriesToShow.length <= 10) {
+    if (countriesToShow.length > 1) {
       return (
         <ul>
           {countriesToShow.map((country) => (
-            <p key={country.name.common}>{country.name.common}<button onClick={()=>setNewFilter(country.name.common)}>Show</button></p>
+            <li key={country.name.common}>
+              {country.name.common} <button onClick={() => setNewFilter(country.name.common)}>Show</button>
+            </li>
           ))}
         </ul>
       )
