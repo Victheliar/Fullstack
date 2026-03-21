@@ -1,6 +1,29 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
+
+const password = process.argv[2]
+
+const url = `mongodb+srv://Victheliar:${password}@cluster0.zkgo9.mongodb.net/?appName=Cluster0`
+
+mongoose.set('strictQuery', false)
+mongoose.connect(url, { family: 4 })
+
+const personsSchema = new mongoose.Schema({
+    name: String,
+    number: String,
+})
+
+personsSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
+    }
+})
+
+const Persons = mongoose.model('Persons', personsSchema)
 
 const app = express()
 
@@ -49,7 +72,9 @@ const generateId = () => {
 
 
 app.get("/api/persons", (request, response) => {
-    response.json(persons)
+    Persons.find({}).then(persons => {
+        response.json(persons)
+    })
 })
 
 app.get("/info", (request, response) => {
