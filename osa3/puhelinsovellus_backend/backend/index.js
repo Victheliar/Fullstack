@@ -18,37 +18,6 @@ app.use(cors())
 
 app.use(express.static('dist'))
 
-let persons = [
-        {
-            id: "1",
-            name: "Arto Hellas",
-            number: "040-123456"
-        },
-        {
-            id: "2",
-            name: "Ada Lovelace",
-            number: "39-44-5323523"
-        },
-        {
-            id: "3",
-            name: "Dan Abramov",
-            number: "12-43-234345"
-        },
-        {
-            id: "4",
-            name: "Mary Poppendieck",
-            number: "39-23-6423122"
-        }
-    ]
-
-const generateId = () => {
-        let id = Math.floor(Math.random()*100000).toString();
-        while (persons.find((person) => person.id === id)) {
-            id = Math.floor(Math.random()*100000).toString();
-        }
-        return id;
-    }
-
 
 app.get("/api/persons", (request, response) => {
     Persons.find({}).then(persons => {
@@ -90,13 +59,6 @@ app.post("/api/persons", (request, response) => {
         })
     }
 
-    const nameExists = persons.some(person => person.name === body.name)
-    if (nameExists) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
-
     const person = new Persons({
         name: body.name,
         number: body.number, 
@@ -107,5 +69,5 @@ app.post("/api/persons", (request, response) => {
     })
 })
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3001
 app.listen(PORT)
