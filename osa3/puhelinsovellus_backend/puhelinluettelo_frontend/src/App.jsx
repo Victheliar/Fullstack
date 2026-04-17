@@ -58,55 +58,55 @@ const App = () => {
     contactService
       .getAll()
       .then(initialContacts => {
-        setPersons(initialContacts)
+        setPersons(Array.isArray(initialContacts) ? initialContacts : [])
       })
   }, [])
 
   const handleNewPerson = (event) => {
     event.preventDefault()
     const nameObject = {name: newName, number: newNumber}
-    const namePresent = persons.find(person => newName.toLowerCase() === person.name.toLowerCase());
-    if (namePresent && window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+    const namePresent = persons.find(person => newName.toLowerCase() === person.name.toLowerCase())
+
+    if (namePresent) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
         contactService
-        .update(namePresent.id, nameObject)
-        .then(returnedContact => {
-          setPersons(persons.map(person => person.id !== returnedContact.id ? person : returnedContact))
-          setNewName('')
-          setNewNumber('')
-        })
-        .then((notification) => {
-          setNotification(
-            `Updated ${namePresent.name}`
-          )
-          setTimeout(() => {
-            setNotification(null)
-          }, 5000)
-        })
-        .catch((error) => {
-          setErrorMessage(
-            `Information of ${namePresent.name} has already been removed from the server`
-          )
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
-        })
-    } else {
+          .update(namePresent.id, nameObject)
+          .then(returnedContact => {
+            setPersons(persons.map(person => person.id !== returnedContact.id ? person : returnedContact))
+            setNewName('')
+            setNewNumber('')
+            setNotification(`Updated ${namePresent.name}`)
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
+          })
+          .catch(() => {
+            setErrorMessage(`Information of ${namePresent.name} has already been removed from the server`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+          })
+      }
+      return
+    }
+
     contactService
       .create(nameObject)
       .then(returnedContact => {
         setPersons(persons.concat(returnedContact))
         setNewName('')
         setNewNumber('')
-      })
-      .then((notification) => {
-        setNotification(
-          `Added ${newName}`
-        )
+        setNotification(`Added ${newName}`)
         setTimeout(() => {
           setNotification(null)
         }, 5000)
       })
-    }
+      .catch((error) => {
+        setErrorMessage(`${error.response.data.error}`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
   }
 
   const handleNewName = (event) => {
@@ -121,7 +121,7 @@ const App = () => {
     setNewFilter(event.target.value)
   }
 
-  const personsToShow = persons.filter((person) => {
+  const personsToShow = (Array.isArray(persons) ? persons : []).filter((person) => {
     return person.name.toLowerCase().includes(newFilter.toLowerCase())
   })
 
@@ -129,22 +129,18 @@ const App = () => {
     const person = persons.find(c => c.id === id)
     const updatedContacts = persons.filter(person => person.id !== id)
 
-    if (window.confirm(`Delete ${person.name}?`)){
+    if (window.confirm(`Delete ${person.name}?`)) {
       contactService
         .remove(person.id)
-        .then(setPersons(updatedContacts))
-        .then(notification => {
-          setNotification(
-           `Deleted ${person.name}` 
-          )
+        .then(() => {
+          setPersons(updatedContacts)
+          setNotification(`Deleted ${person.name}`)
           setTimeout(() => {
             setNotification(null)
           }, 5000)
         })
-        .catch(error => {
-          setErrorMessage(
-            `${person.name} was already deleted`
-          )
+        .catch(() => {
+          setErrorMessage(`${person.name} was already deleted`)
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
