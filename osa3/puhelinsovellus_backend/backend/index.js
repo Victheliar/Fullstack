@@ -99,6 +99,17 @@ app.post("/api/persons", (request, response, next) => {
             error: 'number missing'
         })
     }
+    else if (body.number.length < 8) {
+        return response.status(400).json({
+            error: 'number must be at least 8 characters long'
+        })
+    }
+    else if (!/^\d{2,3}-\d+$/.test(body.number)) {
+        return response.status(400).json({
+            error: 'number must be a valid phone number (format: XXX-XXXXXXX)'
+        })
+    }
+
 
     const person = new Persons({
         name: body.name,
