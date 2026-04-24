@@ -7,17 +7,17 @@ blogsRouter.get('/', (request, response) => {
     });
 });
 
-blogsRouter.get('/:id', (request, response, next) => {
-    Blog.findById(request.params.id)
-        .then((blog) => {
-            if (blog) {
-                response.json(blog)
-            } else {
-                response.status(404).end()
-            }
-        })
-        .catch((error) => next(error))
-})
+// blogsRouter.get('/:id', (request, response, next) => {
+//     Blog.findById(request.params.id)
+//         .then((blog) => {
+//             if (blog) {
+//                 response.json(blog)
+//             } else {
+//                 response.status(404).end()
+//             }
+//         })
+//         .catch((error) => next(error))
+// })
 
 blogsRouter.post('/', (request, response, next) => {
     const body = request.body
@@ -32,7 +32,7 @@ blogsRouter.post('/', (request, response, next) => {
     blog
         .save()
         .then((savedBlog) => {
-            response.json(savedBlog)
+            response.status(201).json(savedBlog)
         })
         .catch((error) => next(error))
 })
