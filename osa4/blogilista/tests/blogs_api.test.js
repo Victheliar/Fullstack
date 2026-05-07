@@ -44,6 +44,11 @@ test('correct amount of blogs are returned as json', async () => {
     assert.strictEqual(response.body.length, initialBlogs.length)
 })
 
+test('blog id is defined as id', async () => {
+    const response = await api.get('/api/blogs')
+    assert.strictEqual(response.body[0].id, initialBlogs[0]._id)
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
