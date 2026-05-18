@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const assert = require('node:assert')
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
@@ -58,6 +58,50 @@ describe('when there is initially one user at db', () => {
         
         const usersAtEnd = await helper.usersInDb()
         assert(result.body.error.includes('expected `username` to be unique'))
+
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
+})
+
+describe('when creating a new user', () => {
+    test('creation fails with proper statuscode and message if password is missing', async () => {
+        const usersAtStart = await helper.usersInDb()
+        
+        const newUser = {
+            username: 'vici',
+            name: 'Victoria Khoreva',
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+        
+        const usersAtEnd = await helper.usersInDb()
+        assert(result.body.error.includes('password is required'))
+
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
+
+    test('creation fails with proper statuscode and message if password is too short', async () => {
+        const usersAtStart = await helper.usersInDb()
+        
+        const newUser = {
+            username: 'vici',
+            name: 'Victoria Khoreva',
+            password: 'sa',
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+        
+        const usersAtEnd = await helper.usersInDb()
+        console.log(result.body.error)
+        assert(result.body.error.includes('password must be at least 3 characters long'))
 
         assert.strictEqual(usersAtEnd.length, usersAtStart.length)
     })
