@@ -5,6 +5,8 @@ const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const middleware = require('../utils/middleware')
 
 const api = supertest(app)
 
@@ -41,8 +43,16 @@ test('a valid blog can be added', async() => {
         likes: 10
     }
 
+    const loginResponse = await api
+        .post('/api/login')
+        .send({ username: 'root', password: 'sekret' })
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    const token = loginResponse.body.token
     await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -59,8 +69,16 @@ test('if likes property is missing, it defaults to 0', async() => {
         url: "http://www.testblog.com"
     }
 
+    const loginResponse = await api
+        .post('/api/login')
+        .send({ username: 'root', password: 'sekret' })
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    const token = loginResponse.body.token
     await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -75,9 +93,17 @@ test('blog without title is not added', async() => {
             url: "http://www.testblog.com",
             likes: 10
         }
+    
+    const loginResponse = await api
+        .post('/api/login')
+        .send({ username: 'root', password: 'sekret' })
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
 
+    const token = loginResponse.body.token
     await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(400)
     
@@ -92,8 +118,16 @@ test('blog without url is not added', async() => {
             likes: 10
         }
 
+    const loginResponse = await api
+        .post('/api/login')
+        .send({ username: 'root', password: 'sekret' })
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    const token = loginResponse.body.token
     await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(400)
     
