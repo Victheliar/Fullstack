@@ -7,6 +7,7 @@ import Notification from './components/Notification'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -44,6 +45,11 @@ const App = () => {
       setNewTitle('')
       setNewAuthor('')
       setNewUrl('')
+
+      setSuccessMessage( `a new blog ${returnedBlog.title} by ${returnedBlog.author} added` )
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
     })
   }
 
@@ -106,6 +112,7 @@ const App = () => {
     return (
       <div>
         <h2> Log in to application</h2>
+        <Notification message={errorMessage} />
         <form onSubmit={handleLogin}>
           <div>
             <label>
@@ -135,6 +142,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={successMessage} />
       {user.username} logged in <button onClick={handleLogout}>logout</button>
       {blogForm()}
       {blogs.map(blog =>
