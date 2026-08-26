@@ -86,7 +86,7 @@ const App = () => {
 
   const blogForm = () => {
     return (
-      <Togglable buttonLabel="create" ref={blogFormRef}>
+      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
       <BlogForm
         title={newTitle}
         author={newAuthor}
@@ -138,7 +138,7 @@ const App = () => {
       {user.username} logged in <button onClick={handleLogout}>logout</button>
       {blogForm()}
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog}/> 
       )}
     </div>
   )
