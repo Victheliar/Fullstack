@@ -3,9 +3,9 @@
     handleTitleChange,
     handleAuthorChange,
     handleUrlChange,
-    newTitle,
-    newAuthor,
-    newUrl
+    title,
+    author,
+    url
   }) => {
     return ( 
       <div>
@@ -14,21 +14,21 @@
           <div>
             title:
             <input
-              value={newTitle}
+              value={title}
               onChange={handleTitleChange}
               />
           </div>
           <div>
             author:
             <input
-              value={newAuthor}
+              value={author}
               onChange={handleAuthorChange}
               />
           </div>
           <div>
             url:
             <input
-              value={newUrl}
+              value={url}
               onChange={handleUrlChange}
               />
           </div>
