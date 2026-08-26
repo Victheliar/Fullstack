@@ -93,33 +93,6 @@ const App = () => {
     setNewUrl(event.target.value)
   }
 
-  // const blogForm = () => (
-  //   <form onSubmit={addBlog}>
-  //     <div>
-  //     title: <input value={newTitle} onChange={handleTitleChange} />
-  //     </div>
-  //     <div>
-  //     author: <input value={newAuthor} onChange={handleAuthorChange} />
-  //     </div>
-  //     <div>
-  //     url: <input value={newUrl} onChange={handleUrlChange} />
-  //     </div>
-  //     <button type="submit">create</button>
-  //   </form>
-  // )
-
-  const blogForm = ({
-    handleSubmit,
-    handleTitleChange,
-    handleAuthorChange,
-    handleUrlChange,
-    newTitle,
-    newAuthor,
-    newUrl
-  }) => {
-    return ( ":DD")
-  }
-
   if (user === null) {
     return (
       <div>
