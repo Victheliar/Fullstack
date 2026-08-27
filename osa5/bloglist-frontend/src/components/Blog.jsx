@@ -20,7 +20,7 @@ const Blog = ({ blog }) => {
     const title = blog.title
     const url = blog.url
 
-    console.log(blog)
+    // console.log(blog)
     await blogService.update(blog.id, { author, likes, title, url, user })
     setLikes(likes)
   }

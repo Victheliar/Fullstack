@@ -20,7 +20,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs( blogs.sort((a, b) => b.likes - a.likes) )
     )  
   }, [])
 
@@ -44,7 +44,7 @@ const App = () => {
     }
     blogFormRef.current.toggleVisibility()
     blogService.create(blogObject).then(returnedBlog => {
-      setBlogs(blogs.concat(returnedBlog))
+      setBlogs(blogs.concat(returnedBlog).sort((a, b) => b.likes - a.likes))
       setNewTitle('')
       setNewAuthor('')
       setNewUrl('')
