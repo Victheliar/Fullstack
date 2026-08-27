@@ -17,3 +17,9 @@
     padding: 10px;
     margin-bottom: 10px;
 }
+
+.remove_button {
+    background-color: blue;
+    border: none;
+    border-radius: 3px;
+}
