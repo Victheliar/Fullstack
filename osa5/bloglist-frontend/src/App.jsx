@@ -21,7 +21,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs.sort((a, b) => b.likes - a.likes) )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const App = () => {
     try {
       const user = await loginService.login({ username, password })
       blogService.setToken(user.token)
-      
+
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
@@ -87,15 +87,15 @@ const App = () => {
   const blogForm = () => {
     return (
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-      <BlogForm
-        title={newTitle}
-        author={newAuthor}
-        url={newUrl}
-        handleTitleChange={({ target }) => setNewTitle(target.value)}
-        handleAuthorChange={({ target }) => setNewAuthor(target.value)}
-        handleUrlChange={({ target }) => setNewUrl(target.value)}
-        handleSubmit={addBlog}
-      />
+        <BlogForm
+          title={newTitle}
+          author={newAuthor}
+          url={newUrl}
+          handleTitleChange={({ target }) => setNewTitle(target.value)}
+          handleAuthorChange={({ target }) => setNewAuthor(target.value)}
+          handleUrlChange={({ target }) => setNewUrl(target.value)}
+          handleSubmit={addBlog}
+        />
       </Togglable>
     )
   }
@@ -109,12 +109,12 @@ const App = () => {
           <div>
             <label>
             username
-            <input
-              type="text"
-              value={username}
-              onChange={({ target }) => setUsername(target.value)}
-              /> 
-              </label>
+              <input
+                type="text"
+                value={username}
+                onChange={({ target }) => setUsername(target.value)}
+              />
+            </label>
           </div>
           <div>
             <label>
@@ -138,7 +138,7 @@ const App = () => {
       {user.username} logged in <button onClick={handleLogout}>logout</button>
       {blogForm()}
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user}/> 
+        <Blog key={blog.id} blog={blog} user={user}/>
       )}
     </div>
   )
