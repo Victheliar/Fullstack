@@ -2,7 +2,7 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import '../index.css'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleDelete }) => {
   const [view, setView] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
 
@@ -30,7 +30,7 @@ const Blog = ({ blog }) => {
   const handleRemove = async event => {
     event.preventDefault()
     if (window.confirm('Remove blog ' + blog.title + ' by ' + blog.author + '?')) {
-      await blogService.remove(blog.id)
+      await handleDelete(blog.id)
     }
   }
 

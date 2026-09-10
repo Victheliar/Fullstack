@@ -56,6 +56,11 @@ const App = () => {
     })
   }
 
+  const deleteBlog = async id => {
+    await blogService.remove(id)
+    setBlogs(blogs.filter(blog => blog.id !== id))
+  }
+
   const handleLogin = async event => {
     event.preventDefault()
     console.log('logging in with', username, password)
@@ -138,7 +143,7 @@ const App = () => {
       {user.username} logged in <button onClick={handleLogout}>logout</button>
       {blogForm()}
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user}/>
+        <Blog key={blog.id} blog={blog} user={user} handleDelete={deleteBlog}/>
       )}
     </div>
   )
