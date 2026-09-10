@@ -40,9 +40,9 @@ test('renders url, likes and user when view button is clicked', async () => {
     const button = screen.getByText('view')
     await user.click(button)
 
-    const urlElement = screen.getByText('https://yippeee.com')
-    const likesElement = screen.getByText('likes 5')
-    const userElement = screen.getByText('vici')
+    const urlElement = screen.findByText('https://yippeee.com')
+    const likesElement = screen.findByText('likes 5')
+    const userElement = screen.findByText('vici')
     expect(urlElement).toBeDefined()
     expect(likesElement).toBeDefined()
     expect(userElement).toBeDefined()
