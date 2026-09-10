@@ -47,3 +47,27 @@ test('renders url, likes and user when view button is clicked', async () => {
     expect(likesElement).toBeDefined()
     expect(userElement).toBeDefined()
 })
+
+test('clicking the like button twice calls event handler twice', async () => {
+    const blog = {
+        title: 'Component testing is done with react-testing-library',
+        author: 'Vici',
+        url: 'https://yippeee.com',
+        likes: 5,
+        user: {
+            username: 'vici',
+            name: 'Viciii'
+        }
+    }
+        const mockHandler = vi.fn()
+
+        render(
+            <Blog blog={blog} handleLike={mockHandler} />
+        )
+
+        const user = userEvent.setup()
+        const button = screen.getByText('like')
+        await user.click(button)
+        await user.click(button)
+    }
+)
