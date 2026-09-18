@@ -2,9 +2,9 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import '../index.css'
 
-const Blog = ({ blog, handleDelete }) => {
+const Blog = ({ blog, handleDelete, handleLike}) => {
   const [view, setView] = useState(false)
-  const [likes, setLikes] = useState(blog.likes)
+  const [likes, setLikes] = useState(blog.likes || 0)
 
   const blogStyle = {
     paddingTop: 10,
@@ -14,17 +14,15 @@ const Blog = ({ blog, handleDelete }) => {
     marginBottom: 5
   }
 
-  const handleLike = async event => {
+  const handleLikeBlog = async event => {
     event.preventDefault()
-    const likes = blog.likes + 1
-    const user = blog.user.id
-    const author = blog.author
-    const title = blog.title
-    const url = blog.url
+    const updatedBlog = {
+      ...blog,
+      likes: likes + 1
+    }
 
-    // console.log(blog)
-    await blogService.update(blog.id, { author, likes, title, url, user })
-    setLikes(likes)
+    await handleLike(blog.id, updatedBlog)
+    setLikes(likes + 1)
   }
 
   const handleRemove = async event => {
@@ -52,7 +50,7 @@ const Blog = ({ blog, handleDelete }) => {
           <br></br>
           {blog.url}
           <br></br>
-          likes {likes} <button onClick={handleLike}>like</button>
+          likes {likes} <button onClick={handleLikeBlog}>like</button>
           <br></br>
           {blog.user.username}
           <br></br>
@@ -67,7 +65,7 @@ const Blog = ({ blog, handleDelete }) => {
           <br></br>
           {blog.url}
           <br></br>
-          likes {likes} <button onClick={handleLike}>like</button>
+          likes {likes} <button onClick={handleLikeBlog}>like</button>
           <br></br>
           {blog.user.username}
         </div>

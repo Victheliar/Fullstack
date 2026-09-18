@@ -49,7 +49,14 @@ test('renders url, likes and user when view button is clicked', async () => {
 })
 
 test('clicking the like button twice calls event handler twice', async () => {
+
+    window.localStorage.setItem(
+        'loggedBlogappUser',
+        JSON.stringify({ username: 'testuser', name: 'Test User' })
+    ) 
+    
     const blog = {
+        id: 1,
         title: 'Component testing is done with react-testing-library',
         author: 'Vici',
         url: 'https://yippeee.com',
@@ -59,15 +66,19 @@ test('clicking the like button twice calls event handler twice', async () => {
             name: 'Viciii'
         }
     }
-        const mockHandler = vi.fn()
+    const mockHandler = vi.fn()
 
-        render(
-            <Blog blog={blog} handleLike={mockHandler} />
-        )
+    render(
+        <Blog blog={blog} handleLike={mockHandler} />
+    )
 
-        const user = userEvent.setup()
-        const button = screen.getByText('like')
-        await user.click(button)
-        await user.click(button)
+    const user = userEvent.setup()
+    const viewButton = screen.getByText('view')
+    await user.click(viewButton)
+    const button = screen.getByText('like')
+    screen.debug()
+    await user.click(button)
+    await user.click(button)
+    expect(mockHandler).toHaveBeenCalledTimes(2)
     }
 )
