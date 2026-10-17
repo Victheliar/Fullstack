@@ -21,4 +21,21 @@ describe('Blog app', () => {
     await expect(page.getByText('username')).toBeVisible()
     await expect(page.getByText('password')).toBeVisible()
   })
+
+  describe('Login', () => {
+    test('succeeds with correct credentials', async ({ page }) => {
+      await page.getByLabel('username').fill('mluukkai')
+      await page.getByLabel('password').fill('salainen')
+      await page.getByRole('button', { name: 'login' }).click()
+      await expect(page.getByText('mluukkai logged in')).toBeVisible()
+    })
+
+    test('fails with wrong credentials', async ({ page }) => {
+      await page.getByLabel('username').fill('mluukkai')
+      await page.getByLabel('password').fill('wrong')
+      await page.getByRole('button', {name: 'login'}).click()
+
+      await expect(page.getByText('wrong username or password')).toBeVisible()
+    })
+  })
 })
