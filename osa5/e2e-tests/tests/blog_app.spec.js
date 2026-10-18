@@ -1,5 +1,6 @@
 // @ts-check
 const { test, expect, beforeEach, describe } = require('@playwright/test')
+const { loginWith, createBlog } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -36,6 +37,17 @@ describe('Blog app', () => {
       await page.getByRole('button', {name: 'login'}).click()
 
       await expect(page.getByText('wrong username or password')).toBeVisible()
+    })
+  })
+
+  describe('When logged in', () => {
+    beforeEach(async ({ page }) => {
+      await loginWith(page, 'mluukkai', 'salainen')
+    })
+
+    test('a new blog can be created', async ({ page }) => {
+      await createBlog(page, 'a blog created by playwright', 'Matti Luukkainen', 'https://url.com')
+      await expect(page.getByText('a blog created by playwright')).toBeVisible()
     })
   })
 })
