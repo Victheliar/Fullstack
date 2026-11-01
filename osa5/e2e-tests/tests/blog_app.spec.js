@@ -5,6 +5,7 @@ const { loginWith, createBlog } = require('./helper')
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
     await request.post('http://localhost:3003/api/testing/reset')
+    // expect(response.status()).toBe(204)
     await request.post('http://localhost:3003/api/users', {
       data: {
         name: 'Matti Luukkainen',
@@ -47,7 +48,7 @@ describe('Blog app', () => {
 
     test('a new blog can be created', async ({ page }) => {
       await createBlog(page, 'a blog created by playwright', 'Matti Luukkainen', 'https://url.com')
-      await expect(page.getByText('a blog created by playwright')).toBeVisible()
+      await expect(page.getByText('a blog created by playwright Matti Luukkainen')).toBeVisible()
     })
 
     test('a blog can be liked', async ({ page }) => {
