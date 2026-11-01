@@ -1,6 +1,7 @@
 // @ts-check
 const { test, expect, beforeEach, describe } = require('@playwright/test')
 const { loginWith, createBlog } = require('./helper')
+const { create } = require('node:domain')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -56,6 +57,19 @@ describe('Blog app', () => {
       await page.getByRole('button', { name: 'view' }).click()
       await page.getByRole('button', { name: 'like' }).click()
       await expect(page.getByText('likes 1')).toBeVisible()
+    })
+
+    test('a blog can be deleted', async ({ page }) => {
+      await createBlog(page, 'blog that is no longer wanted', 'vici', 'https://url.com')
+      await page.getByRole('button', {name: 'view'}).click()
+      
+      page.on("dialog", async (dialog) => {
+        if (dialog.message()==='Remove blog that is no longer wanted by vici?'){
+          await dialog.accept()
+        }
+      })
+      await page.getByRole('button', {name: 'remove'}).click()
+      await expect(page.getByText('blog that is no longer wanted')).toBeHidden()
     })
   })
 })
