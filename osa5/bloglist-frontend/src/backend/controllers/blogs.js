@@ -26,6 +26,9 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
 
   const savedBlog = await blog.save()
 
+  const populatedBlog = await savedBlog.populate('user')
+  
+  response.status(201).json(populatedBlog)
   response.status(201).json(savedBlog)
 })
 
